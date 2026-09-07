@@ -106,10 +106,16 @@ const typeDefs = `
     id: ID!
   }
 
+  type Author {
+    name: String!,
+    bookCount: Int!
+  }
+
   type Query {
     bookCount: Int,
     authorCount: Int,
-    allBooks: [Book!]!
+    allBooks: [Book!]!,
+    allAuthors: [Author!]!
   }
 `;
 
@@ -118,6 +124,21 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => [...new Set(books.map((book) => book.author))].length,
     allBooks: () => books,
+    allAuthors: () => {
+      return books.reduce((authors, book) => {
+        const existingAuthor = authors.find((a) => a.name === book.author);
+        if (existingAuthor) {
+          existingAuthor.bookCount += 1;
+        } else {
+          const author = {
+            name: book.author,
+            bookCount: 1,
+          };
+          authors.push(author);
+        }
+        return authors;
+      }, []);
+    },
   },
 };
 
