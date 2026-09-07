@@ -1,6 +1,7 @@
 const { ApolloServer } = require('@apollo/server');
 const { startStandaloneServer } = require('@apollo/server/standalone');
 const { v1: uuid } = require('uuid');
+const { GraphQLError } = require('graphql');
 
 let authors = [
   {
@@ -161,6 +162,15 @@ const resolvers = {
   },
   Mutation: {
     addBook: (root, args) => {
+      if (books.find((b) => b.title === args.title)) {
+        throw new GraphQLError(`Title must be unique: ${args.title}`, {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.title,
+          },
+        });
+      }
+
       const book = { ...args, id: uuid() };
       books = books.concat(book);
       return book;
