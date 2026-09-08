@@ -1,9 +1,32 @@
-const Authors = ({ show, authors }) => {
+import { useState } from 'react'
+import { useMutation } from '@apollo/client/react'
+import { EDIT_AUTHOR, ALL_AUTHORS } from './../queries'
+
+const Authors = ({ show, authors, setError }) => {
+  const [name, setName] = useState('')
+  const [born, setBorn] = useState('')
+
+  const [changeBorn] = useMutation(EDIT_AUTHOR, {
+    onError: (error) => setError(error.message),
+    onCompleted: (data) => {
+      if (!data.editAuthor) {
+        setError('author not found')
+      }
+    },
+  })
+
   if (!show) {
     return null
   }
 
   if (!authors) return 'no authors'
+
+  const submit = async (event) => {
+    event.preventDefault()
+    changeBorn({ variables: { name, setBornTo: Number(born) } })
+    setName('')
+    setBorn('')
+  }
 
   return (
     <div>
@@ -24,6 +47,31 @@ const Authors = ({ show, authors }) => {
           ))}
         </tbody>
       </table>
+      <h2>Set birthyear</h2>
+      <form onSubmit={submit}>
+        <div>
+          <label>
+            name
+            <input
+              type="texxt"
+              value={name}
+              onChange={({ target }) => setName(target.value)}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            born
+            <input
+              type="number"
+              value={born}
+              onChange={({ target }) => setBorn(target.value)}
+            />
+          </label>
+        </div>
+
+        <button type="submit">update author</button>
+      </form>
     </div>
   )
 }
