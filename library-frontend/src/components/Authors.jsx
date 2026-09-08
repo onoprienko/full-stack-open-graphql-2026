@@ -1,9 +1,9 @@
 const Authors = ({ show, authors }) => {
   if (!show) {
-    return null;
+    return null
   }
 
-  if (!authors) return 'no authors';
+  if (!authors) return 'no authors'
 
   return (
     <div>
@@ -25,7 +25,7 @@ const Authors = ({ show, authors }) => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default Authors;
+export default Authors

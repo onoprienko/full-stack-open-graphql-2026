@@ -1,9 +1,9 @@
 const Books = ({ show, books }) => {
   if (!show) {
-    return null;
+    return null
   }
 
-  if (!books) return 'no books';
+  if (!books) return 'no books'
 
   return (
     <div>
@@ -26,7 +26,7 @@ const Books = ({ show, books }) => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default Books;
+export default Books

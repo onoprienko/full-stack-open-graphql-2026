@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import Authors from './components/Authors';
-import Books from './components/Books';
-import NewBook from './components/NewBook';
+import { useState } from 'react'
+import Authors from './components/Authors'
+import Books from './components/Books'
+import NewBook from './components/NewBook'
 
-import { gql } from '@apollo/client';
-import { useQuery } from '@apollo/client/react';
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 
 const ALL_AUTHORS = gql`
   query {
@@ -15,7 +15,7 @@ const ALL_AUTHORS = gql`
       id
     }
   }
-`;
+`
 
 const ALL_BOOKS = gql`
   query {
@@ -26,15 +26,15 @@ const ALL_BOOKS = gql`
       title
     }
   }
-`;
+`
 
 const App = () => {
-  const authorsResult = useQuery(ALL_AUTHORS);
-  const booksResult = useQuery(ALL_BOOKS);
-  const [page, setPage] = useState('authors');
+  const authorsResult = useQuery(ALL_AUTHORS)
+  const booksResult = useQuery(ALL_BOOKS)
+  const [page, setPage] = useState('authors')
 
   if (authorsResult.loading || booksResult.loading) {
-    return <div>loading...</div>;
+    return <div>loading...</div>
   }
 
   return (
@@ -54,7 +54,7 @@ const App = () => {
 
       <NewBook show={page === 'add'} />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
