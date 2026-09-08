@@ -110,8 +110,9 @@ const typeDefs = `
 
   type Author {
     name: String!,
-    born: String,
-    bookCount: Int!
+    born: Int,
+    bookCount: Int!,
+    id: ID!
   }
 
   type Query {
@@ -150,18 +151,16 @@ const resolvers = {
       return books;
     },
     allAuthors: () => {
-      return books.reduce((authors, book) => {
-        const existingAuthor = authors.find((a) => a.name === book.author);
+      return books.reduce((authorsAcc, book) => {
+        const existingAuthor = authorsAcc.find((a) => a.name === book.author);
         if (existingAuthor) {
           existingAuthor.bookCount += 1;
         } else {
-          const author = {
-            name: book.author,
-            bookCount: 1,
-          };
-          authors.push(author);
+          const authorDB = authors.find((a) => a.name === book.author);
+          const author = { ...authorDB, bookCount: 1 };
+          authorsAcc.push(author);
         }
-        return authors;
+        return authorsAcc;
       }, []);
     },
   },
