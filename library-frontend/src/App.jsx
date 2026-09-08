@@ -3,38 +3,25 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 
-import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
-
-const ALL_AUTHORS = gql`
-  query {
-    allAuthors {
-      name
-      bookCount
-      born
-      id
-    }
-  }
-`
-
-const ALL_BOOKS = gql`
-  query {
-    allBooks {
-      author
-      published
-      id
-      title
-    }
-  }
-`
+import { ALL_AUTHORS, ALL_BOOKS } from './queries'
+import Notify from './components/Notify'
 
 const App = () => {
   const authorsResult = useQuery(ALL_AUTHORS)
   const booksResult = useQuery(ALL_BOOKS)
   const [page, setPage] = useState('authors')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   if (authorsResult.loading || booksResult.loading) {
     return <div>loading...</div>
+  }
+
+  const notify = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 10000)
   }
 
   return (
@@ -52,7 +39,8 @@ const App = () => {
 
       <Books show={page === 'books'} books={booksResult.data.allBooks} />
 
-      <NewBook show={page === 'add'} />
+      <Notify errorMessage={errorMessage} />
+      <NewBook show={page === 'add'} setError={notify} />
     </div>
   )
 }
