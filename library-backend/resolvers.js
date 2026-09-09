@@ -79,8 +79,8 @@ const resolvers = {
       }
       const book = new Book({ ...args, author: author._id.toString() })
 
+      const savedBook = await book.save()
       try {
-        const savedBook = await book.save()
         await savedBook.populate('author')
       } catch (error) {
         throw new GraphQLError(`Saving book failed: ${error.message}`, {
