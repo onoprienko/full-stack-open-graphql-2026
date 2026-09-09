@@ -55,7 +55,17 @@ const resolvers = {
       let author = await Author.exists({ name: args.author })
       if (!author) {
         author = new Author({ name: args.author })
-        await author.save()
+        try {
+          await author.save()
+        } catch (error) {
+          throw new GraphQLError(`Saving author failed: ${error.message}`, {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.author,
+              error,
+            },
+          })
+        }
       }
 
       const bookExists = await Book.exists({ title: args.title })
@@ -68,8 +78,19 @@ const resolvers = {
         })
       }
       const book = new Book({ ...args, author: author._id.toString() })
-      const savedBook = await book.save()
-      await savedBook.populate('author')
+
+      try {
+        const savedBook = await book.save()
+        await savedBook.populate('author')
+      } catch (error) {
+        throw new GraphQLError(`Saving book failed: ${error.message}`, {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.title,
+            error,
+          },
+        })
+      }
       return savedBook
     },
 
