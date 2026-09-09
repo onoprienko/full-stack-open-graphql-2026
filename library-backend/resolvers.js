@@ -107,7 +107,7 @@ const resolvers = {
       return savedBook
     },
 
-    editAuthor: async (root, args, { context }) => {
+    editAuthor: async (root, args, { currentUser }) => {
       if (!currentUser) {
         throw new GraphQLError('not authenticated', {
           extensions: {
@@ -149,6 +149,15 @@ const resolvers = {
         id: user._id,
       }
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+    },
+    _resetDatabase: async () => {
+      if (process.env.NODE_ENV !== 'test') {
+        throw new GraphQLError('_resetDatabase is only available in test mode')
+      }
+      await Author.deleteMany({})
+      await Book.deleteMany({})
+      await User.deleteMany({})
+      return true
     },
   },
 }

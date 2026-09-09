@@ -44,6 +44,8 @@ const typeDefs = /* GraphQL */ `
 
     createUser(username: String!, favoriteGenre: String!): User
     login(username: String!, password: String!): Token
+
+    _resetDatabase: Boolean
   }
 `
 
