@@ -58,3 +58,11 @@ export const EDIT_AUTHOR = gql`
     }
   }
 `
+
+export const LOGIN = gql`
+  mutation login($name: String!, $password: String!) {
+    login(username: $name, password: $password) {
+      value
+    }
+  }
+`
