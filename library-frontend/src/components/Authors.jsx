@@ -23,7 +23,11 @@ const Authors = ({ show, authors, setError, token }) => {
 
   const submit = async (event) => {
     event.preventDefault()
-    changeBorn({ variables: { name, setBornTo: Number(born) } })
+    try {
+      await changeBorn({ variables: { name, setBornTo: Number(born) } })
+    } catch (error) {
+      setError(error.message)
+    }
     setName('')
     setBorn('')
   }
