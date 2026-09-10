@@ -17,6 +17,8 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const client = useApolloClient()
 
+  const [genreFilter, setGenreFilter] = useState(null)
+
   // TODO: after login currentUser does not updates
   const me = useQuery(ME, {
     skip: !token,
@@ -65,7 +67,12 @@ const App = () => {
         token={token}
       />
 
-      <Books show={page === 'books'} books={booksResult.data.allBooks} />
+      <Books
+        show={page === 'books'}
+        books={booksResult.data.allBooks}
+        genreFilter={genreFilter}
+        setGenreFilter={setGenreFilter}
+      />
 
       <Notify errorMessage={errorMessage} />
 
@@ -85,7 +92,11 @@ const App = () => {
             books={booksResult.data.allBooks}
             favoriteGenre={me.data.me.favoriteGenre}
           />
-          <NewBook show={page === 'add'} setError={notify} />
+          <NewBook
+            show={page === 'add'}
+            setError={notify}
+            genreFilter={genreFilter}
+          />
         </>
       )}
     </div>

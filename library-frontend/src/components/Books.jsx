@@ -1,12 +1,9 @@
-import { useState } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { BOOKS_BY_GENRE } from './../queries'
 
-const Books = ({ show, books }) => {
-  const [genre, setGenre] = useState(null)
-
+const Books = ({ show, books, genreFilter, setGenreFilter }) => {
   const booksResponse = useQuery(BOOKS_BY_GENRE, {
-    variables: { genre: genre },
+    variables: { genre: genreFilter },
   })
 
   if (!show) return null
@@ -21,6 +18,8 @@ const Books = ({ show, books }) => {
     ),
   ]
 
+  const booksToRender = genreFilter ? booksResponse.data.allBooks : books
+
   return (
     <div>
       <h2>books</h2>
@@ -32,7 +31,7 @@ const Books = ({ show, books }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {booksResponse.data.allBooks.map((book) => (
+          {booksToRender.map((book) => (
             <tr key={book.id}>
               <td>{book.title}</td>
               <td>{book.author.name}</td>
@@ -44,11 +43,11 @@ const Books = ({ show, books }) => {
       <h2>genres filter</h2>
       <div>
         {genres.map((genre) => (
-          <button key={genre} onClick={() => setGenre(genre)}>
+          <button key={genre} onClick={() => setGenreFilter(genre)}>
             {genre}
           </button>
         ))}
-        <button key="all" onClick={() => setGenre(null)}>
+        <button key="all" onClick={() => setGenreFilter(null)}>
           all genres
         </button>
       </div>
