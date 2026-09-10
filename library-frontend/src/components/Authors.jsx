@@ -59,6 +59,7 @@ const Authors = ({ show, authors, setError, token }) => {
               <label>
                 name
                 <select
+                  name="name"
                   value={name}
                   onChange={({ target }) => setName(target.value)}
                 >

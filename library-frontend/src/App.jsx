@@ -19,7 +19,6 @@ const App = () => {
 
   const [genreFilter, setGenreFilter] = useState(null)
 
-  // TODO: after login currentUser does not updates
   const me = useQuery(ME, {
     skip: !token,
     fetchPolicy: 'no-cache',
@@ -49,7 +48,7 @@ const App = () => {
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
 
-        {!currentUser || !token ? (
+        {!token || !currentUser ? (
           <button onClick={() => setPage('login')}>login</button>
         ) : (
           <>
@@ -76,7 +75,7 @@ const App = () => {
 
       <Notify errorMessage={errorMessage} />
 
-      {!currentUser || !token ? (
+      {!token || !currentUser ? (
         <>
           <LoginForm
             show={page === 'login'}
@@ -90,7 +89,7 @@ const App = () => {
           <Recommendations
             show={page === 'recommend'}
             books={booksResult.data.allBooks}
-            favoriteGenre={me.data.me.favoriteGenre}
+            favoriteGenre={currentUser?.favoriteGenre}
           />
           <NewBook
             show={page === 'add'}

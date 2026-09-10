@@ -23,7 +23,7 @@ const Books = ({ show, books, genreFilter, setGenreFilter }) => {
   return (
     <div>
       <h2>books</h2>
-
+      {genreFilter ? <p>in genre {genreFilter} </p> : null}
       <table>
         <tbody>
           <tr>
