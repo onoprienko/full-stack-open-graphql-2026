@@ -82,9 +82,8 @@ const App = () => {
         <>
           <Recommendations
             show={page === 'recommend'}
-            books={booksResult.data.allBooks.filter((b) =>
-              b.genres.includes(me.data.me.favoriteGenre),
-            )}
+            books={booksResult.data.allBooks}
+            favoriteGenre={me.data.me.favoriteGenre}
           />
           <NewBook show={page === 'add'} setError={notify} />
         </>
